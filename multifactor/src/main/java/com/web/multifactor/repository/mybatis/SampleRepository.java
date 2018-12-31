@@ -1,4 +1,4 @@
-package com.web.multifactor.repository;
+package com.web.multifactor.repository.mybatis;
 
 import java.util.List;
 

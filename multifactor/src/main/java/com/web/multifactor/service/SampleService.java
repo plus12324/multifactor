@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.web.multifactor.model.SampleModel;
-import com.web.multifactor.repository.SampleRepository;
+import com.web.multifactor.repository.mybatis.SampleRepository;
 
 @Service
 @Transactional
