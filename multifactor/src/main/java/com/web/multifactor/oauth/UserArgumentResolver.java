@@ -1,9 +1,9 @@
 package com.web.multifactor.oauth;
 
 import com.web.multifactor.oauth.annotation.SocialUser;
+import com.web.multifactor.repository.jpa.UserRepository;
 import com.web.multifactor.model.User;
 import com.web.multifactor.oauth.SocialType;
-import com.web.multifactor.repository.UserRepository;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -82,8 +82,8 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
                 .name(String.valueOf(map.get("name")))
                 .email(String.valueOf(map.get("email")))
                 .pincipal(String.valueOf(map.get("id")))
-                .socialType(socialType)
-                .createdDate(LocalDateTime.now())
+                .socialtype(socialType)
+                .createddate(LocalDateTime.now())
                 .build();
     }
 
@@ -93,14 +93,14 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
                 .name(propertyMap.get("nickname"))
                 .email(String.valueOf(map.get("kaccount_email")))
                 .pincipal(String.valueOf(map.get("id")))
-                .socialType(KAKAO)
-                .createdDate(LocalDateTime.now())
+                .socialtype(KAKAO)
+                .createddate(LocalDateTime.now())
                 .build();
     }
 
     private void setRoleIfNotSame(User user, OAuth2AuthenticationToken authentication, Map<String, Object> map) {
-        if(!authentication.getAuthorities().contains(new SimpleGrantedAuthority(user.getSocialType().getRoleType()))) {
-            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(map, "N/A", AuthorityUtils.createAuthorityList(user.getSocialType().getRoleType())));
+        if(!authentication.getAuthorities().contains(new SimpleGrantedAuthority(user.getSocialtype().getRoleType()))) {
+            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(map, "N/A", AuthorityUtils.createAuthorityList(user.getSocialtype().getRoleType())));
         }
     }
 }

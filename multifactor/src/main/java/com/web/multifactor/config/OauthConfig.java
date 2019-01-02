@@ -25,9 +25,6 @@ import java.util.stream.Collectors;
 //import static com.web.multifactor.oauth.SocialType.GOOGLE;
 import static com.web.multifactor.oauth.SocialType.KAKAO;
 
-/**
- * Created by KimYJ on 2017-09-12.
- */
 @Configuration
 @EnableWebSecurity
 public class OauthConfig extends WebSecurityConfigurerAdapter {

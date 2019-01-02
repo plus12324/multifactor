@@ -1,7 +1,7 @@
-CREATE DATABASE mydb; -- mydb ╣╔юлем╨ёюл╫╨ ╩Щ╪╨
-USE mydb; -- ╠Б╨╩ ╣╔юлем╨ёюл╫╨╥н mydb╦╕ аЖа╓
-CREATE TABLE mytable ( id INT PRIMARY KEY, name VARCHAR(20) ); -- mytable евюл╨М ╩Щ╪╨
-INSERT INTO mytable VALUES ( 1, 'Will' ); -- ╣╔юлем ют╥б
+О╩©CREATE DATABASE mydb; -- mydb К█╟Л²╢М└╟К╡═Л²╢Л┼╓ Л┐²Л└╠
+USE mydb; -- Й╦╟КЁ╦ К█╟Л²╢М└╟К╡═Л²╢Л┼╓К║° mydbК╔╪ Л╖─Л═∙
+CREATE TABLE mytable ( id INT PRIMARY KEY, name VARCHAR(20) ); -- mytable М┘▄Л²╢К╦■ Л┐²Л└╠
+INSERT INTO mytable VALUES ( 1, 'Will' ); -- К█╟Л²╢М└╟ Л·┘К═╔
 INSERT INTO mytable VALUES ( 2, 'Marry' ); 
 INSERT INTO mytable VALUES ( 3, 'Dean' );
 SELECT id, name FROM mytable WHERE id = 1;
@@ -21,5 +21,7 @@ email VARCHAR(200) NOT NULL,
 pincipal  VARCHAR(100) NOT NULL,
 socialType  VARCHAR(100) NOT NULL,
 createdDate   DATE    NOT NULL,
-updatedDate TIMESTAMP NOT NULL
+updatedDate TIMESTAMP NULL
 )
+
+ALTER TABLE USER MODIFY updatedDate TIMESTAMP NULL;

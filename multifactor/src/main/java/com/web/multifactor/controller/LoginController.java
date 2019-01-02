@@ -11,6 +11,7 @@ public class LoginController {
 
     @GetMapping("/login")
     public String login() {
+    	System.out.println("■ 로그인페이지 이동");
         return "login";
     }
 
