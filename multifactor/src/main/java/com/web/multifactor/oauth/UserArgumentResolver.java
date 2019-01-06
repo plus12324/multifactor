@@ -24,9 +24,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
-
-import static com.web.multifactor.oauth.SocialType.FACEBOOK;
-import static com.web.multifactor.oauth.SocialType.GOOGLE;
 import static com.web.multifactor.oauth.SocialType.KAKAO;
 
 @Component
@@ -56,7 +53,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
             try {
                 OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
                 Map<String, Object> map = authentication.getPrincipal().getAttributes();
-                User convertUser = convertUser(authentication.getAuthorizedClientRegistrationId(), map);
+                User convertUser = getKaKaoUser(map);
 
                 user = userRepository.findByEmail(convertUser.getEmail());
                 if (user == null) { user = userRepository.save(convertUser); }
@@ -70,23 +67,6 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
         return user;
     }
 
-    private User convertUser(String authority, Map<String, Object> map) {
-        if(FACEBOOK.isEquals(authority)) return getModernUser(FACEBOOK, map);
-        else if(GOOGLE.isEquals(authority)) return getModernUser(GOOGLE, map);
-        else if(KAKAO.isEquals(authority)) return getKaKaoUser(map);
-        return null;
-    }
-
-    private User getModernUser(SocialType socialType, Map<String, Object> map) {
-        return User.builder()
-                .name(String.valueOf(map.get("name")))
-                .email(String.valueOf(map.get("email")))
-                .pincipal(String.valueOf(map.get("id")))
-                .socialtype(socialType)
-                .createddate(LocalDateTime.now())
-                .build();
-    }
-
     private User getKaKaoUser(Map<String, Object> map) {
         Map<String, String> propertyMap = (HashMap<String, String>) map.get("properties");
         return User.builder()
@@ -97,10 +77,28 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
                 .createddate(LocalDateTime.now())
                 .build();
     }
-
+    
     private void setRoleIfNotSame(User user, OAuth2AuthenticationToken authentication, Map<String, Object> map) {
         if(!authentication.getAuthorities().contains(new SimpleGrantedAuthority(user.getSocialtype().getRoleType()))) {
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(map, "N/A", AuthorityUtils.createAuthorityList(user.getSocialtype().getRoleType())));
         }
     }
+    
+    private User convertUser(String authority, Map<String, Object> map) {
+//        if(FACEBOOK.isEquals(authority)) return getModernUser(FACEBOOK, map);
+//        else if(GOOGLE.isEquals(authority)) return getModernUser(GOOGLE, map);
+//        else if(KAKAO.isEquals(authority)) return getKaKaoUser(map);
+        return getKaKaoUser(map);
+    }
+
+//    private User getModernUser(SocialType socialType, Map<String, Object> map) {
+//        return User.builder()
+//                .name(String.valueOf(map.get("name")))
+//                .email(String.valueOf(map.get("email")))
+//                .pincipal(String.valueOf(map.get("id")))
+//                .socialtype(socialType)
+//                .createddate(LocalDateTime.now())
+//                .build();
+//    }
+    
 }

@@ -6,7 +6,8 @@ package com.web.multifactor.oauth;
  */
 public enum SocialType {
 	KAKAO("kakao")
-	, FACEBOOK("facebook"), GOOGLE("google"), ;
+	,KAKAO_AUTH("kakao_auth");
+//	, FACEBOOK("facebook"), GOOGLE("google"), ;
 
 	private final String ROLE_PREFIX = "ROLE_";
 	private String name;

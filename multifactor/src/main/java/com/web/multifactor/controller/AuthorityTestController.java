@@ -18,6 +18,11 @@ public class AuthorityTestController {
 
     @GetMapping("/kakao")
     public String kakao() {
-        return "kakao";
+        return "기본인증 성공!";
+    }
+    
+    @GetMapping("/kakao_auth")
+    public String kakao_auth() {
+        return "관리자 승인 성공!";
     }
 }

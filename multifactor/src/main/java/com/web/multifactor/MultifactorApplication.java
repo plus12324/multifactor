@@ -14,17 +14,10 @@ import com.web.multifactor.oauth.UserArgumentResolver;
 
 @SpringBootApplication
 public class MultifactorApplication {
-//	@Autowired(required=true)
-//	private UserArgumentResolver userArgumentResolver;
-
 	public static void main(String[] args) throws UnsupportedEncodingException {
-		System.out.println("■ " + URLDecoder.decode("http%3A%2F%2Flocalhost%3A8080%2Flogin%2Foauth2%2Fcode%2Fkakao","utf-8"));
+//		System.out.println("■ " + URLDecoder.decode("http%3A%2F%2Flocalhost%3A8080%2Flogin%2Foauth2%2Fcode%2Fkakao","utf-8"));
 		SpringApplication.run(MultifactorApplication.class, args);
 	}
 	
-//	@Override
-//	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-//		argumentResolvers.add(userArgumentResolver);
-//	}
 }
 
