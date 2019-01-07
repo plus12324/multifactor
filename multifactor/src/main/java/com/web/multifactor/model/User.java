@@ -17,12 +17,14 @@ import com.web.multifactor.oauth.SocialType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * 필듭명이 카멜표기법인경우 jpa에선 언더스코어(_)로 구분
  */
 @Getter
 @NoArgsConstructor
+@ToString
 @Entity
 @Table
 public class User implements Serializable {
@@ -63,5 +65,5 @@ public class User implements Serializable {
         this.socialtype = socialtype;
         this.createddate = createddate;
         this.updateddate = updateddate;
-    }
+    }   
 }

@@ -71,7 +71,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
         Map<String, String> propertyMap = (HashMap<String, String>) map.get("properties");
         return User.builder()
                 .name(propertyMap.get("nickname"))
-                .email(String.valueOf(map.get("kaccount_email")))
+//                .email(String.valueOf(map.get("email")))
                 .pincipal(String.valueOf(map.get("id")))
                 .socialtype(KAKAO)
                 .createddate(LocalDateTime.now())
@@ -83,22 +83,5 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(map, "N/A", AuthorityUtils.createAuthorityList(user.getSocialtype().getRoleType())));
         }
     }
-    
-    private User convertUser(String authority, Map<String, Object> map) {
-//        if(FACEBOOK.isEquals(authority)) return getModernUser(FACEBOOK, map);
-//        else if(GOOGLE.isEquals(authority)) return getModernUser(GOOGLE, map);
-//        else if(KAKAO.isEquals(authority)) return getKaKaoUser(map);
-        return getKaKaoUser(map);
-    }
-
-//    private User getModernUser(SocialType socialType, Map<String, Object> map) {
-//        return User.builder()
-//                .name(String.valueOf(map.get("name")))
-//                .email(String.valueOf(map.get("email")))
-//                .pincipal(String.valueOf(map.get("id")))
-//                .socialtype(socialType)
-//                .createddate(LocalDateTime.now())
-//                .build();
-//    }
     
 }
