@@ -15,13 +15,13 @@ SELECT count(1) from mytable; gives the number of records in the table
 
 CREATE TABLE IF NOT EXISTS user (
 idx  BIGINT PRIMARY KEY AUTO_INCREMENT  NOT NULL,
-name  VARCHAR(100) NOT NULL,
-password  VARCHAR(200) NOT NULL,
-email VARCHAR(200) NOT NULL,
+name  VARCHAR(100) character set utf8 NOT NULL,
+password  VARCHAR(200) NULL,
+email VARCHAR(200) character set utf8 NULL,
 pincipal  VARCHAR(100) NOT NULL,
-socialType  VARCHAR(100) NOT NULL,
-createdDate   DATE    NOT NULL,
-updatedDate TIMESTAMP NULL
+social_type  VARCHAR(100) NULL,
+created_date   DATE    NULL,
+updated_date TIMESTAMP NULL
 )
 
 ALTER TABLE USER MODIFY updatedDate TIMESTAMP NULL;

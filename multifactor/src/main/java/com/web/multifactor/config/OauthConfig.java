@@ -34,7 +34,8 @@ public class OauthConfig extends WebSecurityConfigurerAdapter {
         http
             .authorizeRequests()
                 .antMatchers("/", "/oauth2/**", "/login/**",  "/css/**", "/images/**", "/js/**", "/console/**").permitAll()
-                .antMatchers("/kakao").hasAuthority(KAKAO.getRoleType())//기본권한
+                .antMatchers("/kakao").hasAnyAuthority(KAKAO.getRoleType(), KAKAO_AUTH.getRoleType())//기본권한
+                .antMatchers("/kakao_auth").hasAuthority(KAKAO_AUTH.getRoleType())//관리자승인권한
                 .antMatchers("/kakao_auth").hasAuthority(KAKAO_AUTH.getRoleType())//관리자승인권한
                 .anyRequest().authenticated()
                 

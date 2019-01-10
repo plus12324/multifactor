@@ -45,8 +45,8 @@ public class JpaMappingTest {
                 .password("test")
                 .email(email)
                 .pincipal(".")
-                .createddate(LocalDateTime.now())
-                .socialtype(SocialType.KAKAO)
+                .createdDate(LocalDateTime.now())
+                .socialType(SocialType.KAKAO)
                 .build());
 
 //        boardRepository.save(Board.builder()
@@ -61,7 +61,7 @@ public class JpaMappingTest {
 
     @Test
     public void jpa_test1() {
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findByPincipal(email);
         assertThat(user.getName(), is("havi"));
         assertThat(user.getPassword(), is("test"));
         assertThat(user.getEmail(), is(email));

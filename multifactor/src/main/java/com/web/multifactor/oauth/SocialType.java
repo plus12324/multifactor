@@ -5,7 +5,8 @@ package com.web.multifactor.oauth;
  * @since 2018.12.29
  */
 public enum SocialType {
-	KAKAO("kakao")
+	ADMIN("admin")
+	,KAKAO("kakao")
 	,KAKAO_AUTH("kakao_auth");
 //	, FACEBOOK("facebook"), GOOGLE("google"), ;
 

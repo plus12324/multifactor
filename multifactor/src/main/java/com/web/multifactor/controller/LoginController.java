@@ -59,7 +59,7 @@ public class LoginController {
 	        OAuth2AuthorizedClient OAuth2AuthorizedClient = clientService.loadAuthorizedClient(
 	        	    		authentication.getAuthorizedClientRegistrationId(),
 	        	    		authentication.getName());
-	
+	        	
 	        String accessToken = OAuth2AuthorizedClient.getAccessToken().getTokenValue();
 	     
 	        post.addHeader("Authorization", "Bearer " + accessToken);

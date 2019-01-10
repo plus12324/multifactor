@@ -29,7 +29,9 @@ import lombok.ToString;
 @Table
 public class User implements Serializable {
 
-    @Id
+	private static final long serialVersionUID = 7012740216021380252L;
+
+	@Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
@@ -46,24 +48,24 @@ public class User implements Serializable {
     @Column
     private String pincipal;
 
-    @Column(name="socialtype")
+    @Column
     @Enumerated(EnumType.STRING)
-    private SocialType socialtype;
+    private SocialType socialType;
 
-    @Column(name="createddate")
-    private LocalDateTime createddate;
+    @Column
+    private LocalDateTime createdDate;
 
-    @Column(name="updateddate")
-    private LocalDateTime updateddate;
+    @Column
+    private LocalDateTime updatedDate;
 
     @Builder
-    public User(String name, String password, String email, String pincipal, SocialType socialtype, LocalDateTime createddate, LocalDateTime updateddate) {
+    public User(String name, String password, String email, String pincipal, SocialType socialType, LocalDateTime createdDate, LocalDateTime updatedDate) {
         this.name = name;
         this.password = password;
         this.email = email;
         this.pincipal = pincipal;
-        this.socialtype = socialtype;
-        this.createddate = createddate;
-        this.updateddate = updateddate;
+        this.socialType = socialType;
+        this.createdDate = createdDate;
+        this.updatedDate = updatedDate;
     }   
 }

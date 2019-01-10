@@ -53,10 +53,9 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
             try {
                 OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
                 Map<String, Object> map = authentication.getPrincipal().getAttributes();
-                User convertUser = getKaKaoUser(map);
-
-                user = userRepository.findByEmail(convertUser.getEmail());
-                if (user == null) { user = userRepository.save(convertUser); }
+                User sessionUser = getKaKaoUser(map);
+                user = userRepository.findByPincipal(sessionUser.getPincipal());
+                if (user == null) { user = userRepository.save(sessionUser); }
 
                 setRoleIfNotSame(user, authentication, map);
                 session.setAttribute("user", user);
@@ -70,17 +69,17 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
     private User getKaKaoUser(Map<String, Object> map) {
         Map<String, String> propertyMap = (HashMap<String, String>) map.get("properties");
         return User.builder()
-                .name(propertyMap.get("nickname"))
+                .name(propertyMap.get("nickname"))			//카톡 닉네임
 //                .email(String.valueOf(map.get("email")))
                 .pincipal(String.valueOf(map.get("id")))
-                .socialtype(KAKAO)
-                .createddate(LocalDateTime.now())
+                .socialType(KAKAO)
+                .createdDate(LocalDateTime.now())
                 .build();
     }
     
     private void setRoleIfNotSame(User user, OAuth2AuthenticationToken authentication, Map<String, Object> map) {
-        if(!authentication.getAuthorities().contains(new SimpleGrantedAuthority(user.getSocialtype().getRoleType()))) {
-            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(map, "N/A", AuthorityUtils.createAuthorityList(user.getSocialtype().getRoleType())));
+        if(!authentication.getAuthorities().contains(new SimpleGrantedAuthority(user.getSocialType().getRoleType()))) {
+            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(map, "N/A", AuthorityUtils.createAuthorityList(user.getSocialType().getRoleType())));
         }
     }
     
