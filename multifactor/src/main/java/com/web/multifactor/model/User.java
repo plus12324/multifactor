@@ -1,6 +1,7 @@
 package com.web.multifactor.model;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -11,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.web.multifactor.oauth.SocialType;
 
@@ -58,7 +60,17 @@ public class User implements Serializable {
     @Column
     private LocalDateTime updatedDate;
 
-    @Builder
+    @Transient 
+    private LocalDate inputDate;
+    
+    public LocalDate getInputDate() {
+    	inputDate = LocalDate.from(this.getCreatedDate());
+		return inputDate;
+	}
+
+
+
+	@Builder
     public User(String name, String password, String email, String pincipal, SocialType socialType, LocalDateTime createdDate, LocalDateTime updatedDate) {
         this.name = name;
         this.password = password;

@@ -14,29 +14,47 @@
 
 <script>
 	function ajaxSuccessCallback(data){
-		
+		var socialTypeSplit = $("#socialTypeTmp").text().split(",");
+	    
 		$("#userTable > tbody").empty();
-		
-		$.each(data, function() {			
+		var userList = data.userList;
+		$.each(userList, function(index, value) {
+			var tmpOpt = "";
+			
+			for (var i=0 ; i < socialTypeSplit.length ; i++){
+				tmpOpt += "<option value=\"" + socialTypeSplit[i] + "\"";			
+				tmpOpt += (socialTypeSplit[i] == value.socialType) ? " selected=\"selected\"" : "";				
+				tmpOpt += ">" + socialTypeSplit[i] + "</option>";
+			}
+			
 			var tmpRow = "<tr>";
-			tmpRow += "<td>" + data.idx + "</td>";
-			tmpRow += "<td>" + data.name + "</td>";
-			tmpRow += "<td>" + data.social + "</td>";
-			tmpRow += "<td>" + data.createdDate + "</td>";
+			tmpRow += "<td>" + value.idx + "</td>";
+			tmpRow += "<td>" + value.name + "</td>";
+			tmpRow += "<td><select class=\"select\" name=\"selectsScialType\" id=\"selectsScialType\">";
+			tmpRow += "<option>선택</option>";
+			tmpRow += tmpOpt;
+			tmpRow += "</select></td>";
+			tmpRow += "<td>" + value.inputDate + "</td>";
 			tmpRow += "<td>";
-			tmpRow += "<button onclick=\"\" class=\"btn btn-success btn-sm\">적용</button>";
-			tmpRow += "<button onclick=\"\" class=\"btn btn-danger btn-sm\">삭제</button></td>";
+			tmpRow += "<button onclick=\"updateUser('userSave', '"+value.idx+"', $('#selectsScialType option:selected').val())\" class=\"btn btn-success btn-sm\">적용</button>&nbsp;";
+			tmpRow += "<button onclick=\"updateUser('userDel', '"+value.idx+"')\" class=\"btn btn-danger btn-sm\">삭제</button></td>";
 			tmpRow += "</tr>";
-			alert(tmpRow);
 			$('#userTable > tbody:last').append(tmpRow);
 		});
 	}
-	function test(formName) {
-		var param = $("#"+formName).serialize();
+	
+	function updateUser(type, idx, socialType) {		
+ 		$("#idx").attr("value",idx); 		
+ 		$("#socialType").attr("value",socialType);
+ 		$("#usersForm").attr("action","/admin/" + type);
+ 		
+ 		alert($("#idx").attr("value") + '/' + $("#socialType").attr("value"));
+ 		
 		$.ajax({
-			type : $("#"+formName).attr("method"),
-			url : $("#"+formName).attr("action"),
-			data : param,
+			contentType: "application/json",
+			type : $("#usersForm").attr("method"),
+			url : $("#usersForm").attr("action"),
+			data : JSON.stringify($("#usersForm").serialize()),
 			success :  function(data) {
 				ajaxSuccessCallback(data);
 			},
@@ -50,9 +68,7 @@
 		$.ajax({
 			url : "/admin/userList",
 			type : "get",
-			//             dataType : "xml",
 			success :  function(data) {
-				alert(data);
 				ajaxSuccessCallback(data);
 			},
 			error : function name() {
@@ -61,11 +77,10 @@
 		});
 	}
 
-// 	$(document).ready(getList());
 </script>
-
 </head>
 <body>
+
 	<div th:replace="layout/header::header"></div>
 
 	<div class="container">
@@ -74,9 +89,6 @@
 		</div>
 
 		<a href="javascript:getList()">search</a>
-<!-- 		<form th:action="@{/admin/userList}" method="get"> -->
-<!-- 			<input class="btn btn-danger" type="submit" value="조회" /> -->
-<!-- 		</form> -->
 
 		<br /> <br /> <br />
 		<div id="mainHide">
@@ -88,20 +100,25 @@
 						<th class="col-md-2">권한</th>
 						<th class="col-md-2">등록일</th>
 						<th class="col-md-2"></th>
-
 					</tr>
 				</thead>
+				
+				<form id="usersForm" action="/admin/userDel" method="post">
+					<input type="hidden" id="idx" name="idx" value=""/>
+					<input type="hidden" id="socialType" name="socialType" value=""/>
+				</form>
+				
 				<tbody>
 					<tr th:each="user : ${userList}">
 						<td th:text="${user.idx}">1</td>
 						<td th:text="${user.name}">tester</td>
 						<td th:with="user_socialType_value=${user.socialType.value}">
-							<select class="select" name="socialType" id="socialType">
+							<select class="select" name="selectsScialType" id="selectsScialType">
 								<option>선택</option>
 								<option
 									th:each="select : ${T(com.web.multifactor.oauth.SocialType).values()}"
 									th:value="${select}"
-									th:text="${select} + ' : ' + ${select.value}"
+									th:text="${select}"
 									th:selected="${user_socialType_value} == ${select.value}"></option>
 							</select>
 
@@ -109,18 +126,18 @@
 						<!--<td><a th:href="'/board?idx='+${user.idx}"	th:text="${user.name}"></a></td> -->
 						<td th:text="${user.createdDate} ? ${#temporals.format(user.createdDate,'yyyy-MM-dd')} : ${user.createdDate}"></td>
 						<td>
-							<button onclick="" class="btn btn-success btn-sm">적용</button>
-							<button onclick="test('delForm')" class="btn btn-danger btn-sm">삭제</button>
-							<form id="delForm" action="/admin/userDel" method="post">
-								<input type="hidden" name="idx" th:value="${user.idx}"/>
-							</form>
+							<button th:onclick="'updateUser(\'userSave\', \'' + ${user.idx} + '\', $(\'#selectsScialType option:selected\').val());'" class="btn btn-success btn-sm">적용</button>
+							<button th:onclick="'updateUser(\'userDel\', \'' + ${user.idx} + '\');'" class="btn btn-danger btn-sm">삭제</button>
 						</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
-		<br />
-
+		<br/>
+		
+<span id="socialTypeTmp" hidden="true">
+	<th:block th:each="a, iterStat : ${T(com.web.multifactor.oauth.SocialType).values()}" th:text="!${iterStat.last} ? ${a} + ',': ${a}"/>
+</span>
 		<!-- Pagination -->
 		<!--         <nav aria-label="Page navigation" style="text-align:center;"> -->
 		<!--             <ul class="pagination" th:with="startNumber=${T(Math).floor(boardList.number/10)}*10+1, endNumber=(${boardList.totalPages} > ${startNumber}+9) ? ${startNumber}+9 : ${boardList.totalPages}"> -->
