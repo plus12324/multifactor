@@ -54,7 +54,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
                 OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
                 Map<String, Object> map = authentication.getPrincipal().getAttributes();
                 User sessionUser = getKaKaoUser(map);
-                user = userRepository.findByPincipal(sessionUser.getPincipal());
+                user = userRepository.findOneByPincipal(sessionUser.getPincipal());
                 if (user == null) { user = userRepository.save(sessionUser); }
 
                 setRoleIfNotSame(user, authentication, map);

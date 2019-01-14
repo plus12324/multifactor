@@ -19,12 +19,14 @@ import com.web.multifactor.oauth.SocialType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 /**
  * 필듭명이 카멜표기법인경우 jpa에선 언더스코어(_)로 구분
  */
 @Getter
+@Setter
 @NoArgsConstructor
 @ToString
 @Entity

@@ -61,7 +61,7 @@ public class JpaMappingTest {
 
     @Test
     public void jpa_test1() {
-        User user = userRepository.findByPincipal(email);
+        User user = userRepository.findOneByPincipal(email);
         assertThat(user.getName(), is("havi"));
         assertThat(user.getPassword(), is("test"));
         assertThat(user.getEmail(), is(email));

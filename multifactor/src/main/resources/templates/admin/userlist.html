@@ -22,9 +22,11 @@
 			var tmpOpt = "";
 			
 			for (var i=0 ; i < socialTypeSplit.length ; i++){
-				tmpOpt += "<option value=\"" + socialTypeSplit[i] + "\"";			
-				tmpOpt += (socialTypeSplit[i] == value.socialType) ? " selected=\"selected\"" : "";				
-				tmpOpt += ">" + socialTypeSplit[i] + "</option>";
+				var socialType = $.trim(socialTypeSplit[i]);
+				tmpOpt += "<option value=\"" + socialType + "\"";
+				alert(socialType + "=" + value.socialType);
+				tmpOpt += (socialType == value.socialType) ? " selected=\"selected\"" : "";				
+				tmpOpt += ">" + socialType + "</option>";
 			}
 			
 			var tmpRow = "<tr>";
@@ -48,13 +50,10 @@
  		$("#socialType").attr("value",socialType);
  		$("#usersForm").attr("action","/admin/" + type);
  		
- 		alert($("#idx").attr("value") + '/' + $("#socialType").attr("value"));
- 		
 		$.ajax({
-			contentType: "application/json",
 			type : $("#usersForm").attr("method"),
 			url : $("#usersForm").attr("action"),
-			data : JSON.stringify($("#usersForm").serialize()),
+			data : $("#usersForm").serialize(),
 			success :  function(data) {
 				ajaxSuccessCallback(data);
 			},
@@ -159,6 +158,20 @@
 		<!-- /Pagination -->
 	</div>
 
+
+<!-- Single button -->
+<div class="btn-group">
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+    Action <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" role="menu">
+    <li><a href="#">Action</a></li>
+    <li><a href="#">Another action</a></li>
+    <li><a href="#">Something else here</a></li>
+    <li class="divider"></li>
+    <li><a href="#">Separated link</a></li>
+  </ul>
+</div>
 	<div th:replace="layout/footer::footer"></div>
 </body>
 </html>

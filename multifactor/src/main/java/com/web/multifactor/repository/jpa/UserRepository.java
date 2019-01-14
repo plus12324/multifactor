@@ -8,5 +8,6 @@ import com.web.multifactor.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    User findByPincipal(String pincipal);
+	User findOneByPincipal(String pincipal);
+	User findOneByIdx(Long idx);
 }
