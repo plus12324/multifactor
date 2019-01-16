@@ -65,7 +65,7 @@
 	
 	function getList() {
 		$.ajax({
-			url : "/admin/userList",
+			url : "/admin/userList?page=0&size=10&sort=idx,desc",
 			type : "get",
 			success :  function(data) {
 				ajaxSuccessCallback(data);

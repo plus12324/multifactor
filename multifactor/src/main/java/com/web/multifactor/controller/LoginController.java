@@ -41,7 +41,7 @@ public class LoginController {
     @GetMapping("/loginSuccess")
     public String loginComplete(@SocialUser User user) {//@SocialUser User user
     	System.out.println("■ 로그인 성공 : " + user.toString());
-        return "home";
+        return "redirect:/admin/userlist?page=0&size=10&sort=idx,desc";
     }
     
     @GetMapping("/unlink")
@@ -54,8 +54,7 @@ public class LoginController {
             final HttpClient client = HttpClientBuilder.create().build();        
             final HttpPost post = new HttpPost(RequestUrl);
             
-	        OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) auth;
-	        
+	        OAuth2AuthenticationToken authentication = (OAuth2AuthenticationToken) auth;	        
 	        OAuth2AuthorizedClient OAuth2AuthorizedClient = clientService.loadAuthorizedClient(
 	        	    		authentication.getAuthorizedClientRegistrationId(),
 	        	    		authentication.getName());
