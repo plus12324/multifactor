@@ -32,16 +32,10 @@ public class LoginController {
 	@Autowired
 	private OAuth2AuthorizedClientService clientService;
 
-    @GetMapping("/login")
-    public String login() {
-//    	System.out.println("■ 로그인페이지 이동");
-        return "login";
-    }
-
     @GetMapping("/loginSuccess")
     public String loginComplete(@SocialUser User user) {//@SocialUser User user
     	System.out.println("■ 로그인 성공 : " + user.toString());
-        return "redirect:/admin/userlist?page=0&size=10&sort=idx,desc";
+        return "forward:/admin/userList?page=0&size=10&sort=idx,desc";
     }
     
     @GetMapping("/unlink")

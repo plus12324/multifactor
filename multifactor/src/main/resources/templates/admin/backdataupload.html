@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Board Form</title>
+<link rel="stylesheet" th:href="@{/css/base.css}" />
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"
+	th:href="@{/webjars/bootstrap/3.3.4/css/bootstrap.min.css}" />
+
+<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+	th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
+<script	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"
+	th:src="@{/webjars/bootstrap/3.3.4/js/bootstrap.min.js}"></script>
+
+<script>
+function bs_input_file() {
+	$(".input-file").before(
+		function() {
+			if ( ! $(this).prev().hasClass('input-ghost') ) {
+				var element = $("<input type='file' class='input-ghost' style='visibility:hidden; height:0'>");
+				element.attr("name",$(this).attr("name"));
+				element.change(function(){
+					element.next(element).find('input').val((element.val()).split('\\').pop());
+				});
+				$(this).find("button.btn-choose").click(function(){
+					element.click();
+				});
+				$(this).find("button.btn-reset").click(function(){
+					element.val(null);
+					$(this).parents(".input-file").find('input').val('');
+				});
+				$(this).find('input').css("cursor","pointer");
+				$(this).find('input').mousedown(function() {
+					$(this).parents('.input-file').prev().click();
+					return false;
+				});
+				return element;
+			}
+		}
+	);
+}
+$(function() {
+	bs_input_file();
+});
+</script>
+
+<BODY>
+	<div th:replace="layout/header::header"></div>
+		<div class="container">
+			<form id="excelUploadForm" method="post" action="/file/excel/xlsxUpload" enctype="multipart/form-data">
+			
+				<div class="form-group">
+					<div class="input-group input-file" name="Fichier1">
+						<span class="input-group-btn">
+			        		<button class="btn btn-default btn-choose btn-sm" type="button">Choose</button>
+			    		</span>
+			    		<input type="text" class="form-control input-sm" placeholder='Choose a file...' />
+			    		<span class="input-group-btn">
+			       			 <button class="btn btn-warning btn-reset btn-sm" type="button">취소</button>
+			       			 <button class="btn btn-success btn-submit btn-sm" type="button">업로드</button>
+			    		</span>
+					</div>
+				</div>
+			</form>		
+		</div>
+	<div th:replace="layout/footer::footer"></div>
+</BODY>
+
+<script>
+$(".btn-submit").click(function() {
+	var formData = new FormData($("#excelUploadForm")[0]);
+	
+// 	alert(formData);
+	
+	$.ajax({
+		type : $("#excelUploadForm").attr("method"),
+		url : $("#excelUploadForm").attr("action"),
+		data : formData,
+        processData : false,
+        contentType : false,
+		success :  function(data) {
+			alert("Completed!");
+		},
+		error : function(data) {
+			alert("error");
+		}
+	});
+	
+});
+</script>
