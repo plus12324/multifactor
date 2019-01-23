@@ -70,8 +70,6 @@ public class User implements Serializable {
 		return inputDate;
 	}
 
-
-
 	@Builder
     public User(String name, String password, String email, String pincipal, SocialType socialType, LocalDateTime createdDate, LocalDateTime updatedDate) {
         this.name = name;

@@ -11,4 +11,5 @@ public interface SampleRepository {
 
 	SampleModel selectOneById(Long id);
 	List<SampleModel> selectAll();
+	public void insert(SampleModel sampleModel);
 }
