@@ -1,4 +1,4 @@
-package com.web.multifactor;
+package com.web.multifactor.service;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -15,6 +15,7 @@ import org.apache.poi.ooxml.util.SAXHelper;
 import org.apache.poi.xssf.eventusermodel.XSSFReader;
 import org.apache.poi.xssf.model.SharedStringsTable;
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
@@ -23,6 +24,9 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
+import com.web.multifactor.repository.jpa.UserRepository;
+import com.web.multifactor.repository.mybatis.SampleRepository;
+
 /**
  * bulk jpa  : https://www.hameister.org/SpringBootUsingIdsForBulkImports.html
  * bulk mybatis : https://araikuma.tistory.com/480
@@ -30,7 +34,14 @@ import org.xml.sax.helpers.DefaultHandler;
  * See {@link XLSX2CSV} for a fuller example of doing
  *  XSLX processing with the XSSF Event code.
  */
-public class FromHowTo {
+public class ExcelBulkReadService {
+	
+	@Autowired
+	SampleRepository sampleRepository;
+	
+	@Autowired
+	UserRepository userRepository;
+		
     public void processFirstSheet(String filename) throws Exception {
         try (OPCPackage pkg = OPCPackage.open(filename, PackageAccess.READ)) {
             XSSFReader r = new XSSFReader(pkg);
@@ -145,11 +156,9 @@ public class FromHowTo {
         }
     }
 
-    public static void main(String[] args) throws Exception {
-    	
-    	
+//    public static void main(String[] args) throws Exception {    	
 //        FromHowTo howto = new FromHowTo();
 //        howto.processFirstSheet("C:\\Users\\sungb_000\\git\\multifactor\\multifactor\\test.xlsx");
 //        howto.processAllSheets("C:\\Users\\sungb_000\\git\\multifactor\\multifactor\\test.xlsx");
-    }
+//    }
 }
