@@ -18,9 +18,8 @@
           FROM mytable
     </select>
 
-    <insert id="insertCity">
-      INSERT INTO CITY (NAME, COUNTRY, POPULATION)
-      VALUES (#{name}, #{country}, #{population})
+    <insert id="insert">
+      INSERT INTO mytable (ID, NAME) VALUES (#{id}, #{name})
     </insert>
 
 </mapper>

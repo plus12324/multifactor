@@ -16,6 +16,8 @@ import org.apache.poi.xssf.eventusermodel.XSSFReader;
 import org.apache.poi.xssf.model.SharedStringsTable;
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.transaction.annotation.Transactional;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
@@ -34,6 +36,7 @@ import com.web.multifactor.repository.mybatis.SampleRepository;
  * See {@link XLSX2CSV} for a fuller example of doing
  *  XSLX processing with the XSSF Event code.
  */
+@Transactional(rollbackFor=Exception.class)
 public class ExcelBulkReadService {
 	
 	@Autowired
@@ -41,7 +44,8 @@ public class ExcelBulkReadService {
 	
 	@Autowired
 	UserRepository userRepository;
-		
+	
+	@Async
     public void processFirstSheet(String filename) throws Exception {
         try (OPCPackage pkg = OPCPackage.open(filename, PackageAccess.READ)) {
             XSSFReader r = new XSSFReader(pkg);
@@ -56,7 +60,8 @@ public class ExcelBulkReadService {
 			}
         }
     }
-
+	
+	@Async
     public void processAllSheets(String filename) throws Exception {
         try (OPCPackage pkg = OPCPackage.open(filename, PackageAccess.READ)) {
             XSSFReader r = new XSSFReader(pkg);
@@ -122,7 +127,9 @@ public class ExcelBulkReadService {
                 // Figure out if the value is an index in the SST
                 String cellType = attributes.getValue("t");
                 nextIsString = cellType != null && cellType.equals("s");
+                System.out.print(nextIsString + "/");
                 inlineStr = cellType != null && cellType.equals("inlineStr");
+                System.out.print(inlineStr);
             }
             // Clear contents cache
             lastContents = "";
@@ -134,8 +141,11 @@ public class ExcelBulkReadService {
             // Process the last contents as required.
             // Do now, as characters() may be called more than once
             if(nextIsString) {
-                Integer idx = Integer.valueOf(lastContents);
+            	System.out.println("■B : " + lastContents);
+            	Integer idx = Integer.valueOf(lastContents);
                 lastContents = lruCache.get(idx);
+                System.out.println("■A : " + lastContents);
+                
                 if (lastContents == null && !lruCache.containsKey(idx)) {
                     lastContents = new XSSFRichTextString(sst.getEntryAt(idx)).toString();
                     lruCache.put(idx, lastContents);
@@ -146,19 +156,20 @@ public class ExcelBulkReadService {
             // v => contents of a cell
             // Output after we've seen the string contents
             if(name.equals("v") || (inlineStr && name.equals("c"))) {
-                System.out.println(lastContents);
+                System.out.println(localName +" / "+ lastContents);
             }
         }
 
         @Override
         public void characters(char[] ch, int start, int length) throws SAXException { // NOSONAR
             lastContents += new String(ch, start, length);
+            System.out.println("■ : " + lastContents);
         }
     }
 
-//    public static void main(String[] args) throws Exception {    	
-//        FromHowTo howto = new FromHowTo();
-//        howto.processFirstSheet("C:\\Users\\sungb_000\\git\\multifactor\\multifactor\\test.xlsx");
+    public static void main(String[] args) throws Exception {    	
+    	ExcelBulkReadService howto = new ExcelBulkReadService();
+        howto.processFirstSheet("C:\\Users\\sungb_000\\git\\multifactor\\multifactor\\test.xlsx");
 //        howto.processAllSheets("C:\\Users\\sungb_000\\git\\multifactor\\multifactor\\test.xlsx");
-//    }
+    }
 }
