@@ -15,6 +15,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.web.multifactor.service.ExcelBulkReadService;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 @Controller
 @RequestMapping("/file")
@@ -25,11 +28,11 @@ public class FileUploadController {
 	
 	@RequestMapping(value="/excel/xlsxUpload", method=RequestMethod.POST)
 	@ResponseBody 
-	public String fileUp(MultipartHttpServletRequest multi) {
+	public String fileUp(MultipartHttpServletRequest multi) throws Exception {
         
         // 저장 경로 설정
         String root = multi.getSession().getServletContext().getRealPath("/");
-        String path = root+"resources/upload/";         
+        String path = root+"resources\\upload\\";         
         String newFileName = ""; // 업로드 되는 파일명
          
         java.io.File dir = new java.io.File(path);
@@ -42,20 +45,22 @@ public class FileUploadController {
             String uploadFile = files.next();
             
             MultipartFile mFile = multi.getFile(uploadFile);
-            String fileName = mFile.getOriginalFilename();
-            System.out.println("실제 파일 이름 : " +fileName);
-            newFileName = System.currentTimeMillis()+"."
-                    +fileName.substring(fileName.lastIndexOf(".")+1);
-             
-            try {
-                mFile.transferTo(new File(path+newFileName));
-            } catch (Exception e) {
-                e.printStackTrace();
+            try (InputStream inputStream = mFile.getInputStream();){            	
+            	excelBulkReadService.processSheet(inputStream);
             }
+//            
+//            String fileName = mFile.getOriginalFilename();
+//            System.out.println("실제 파일 이름 : " +fileName);
+//            newFileName = System.currentTimeMillis()+"."
+//                    +fileName.substring(fileName.lastIndexOf(".")+1);
+//             
+//            try {
+//                mFile.transferTo(new File(path+newFileName));
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
         }
          
-        System.out.println("id : " + multi.getParameter("id"));
-        System.out.println("pw : " + multi.getParameter("pw"));
         
         return "ajaxUpload";
     }
